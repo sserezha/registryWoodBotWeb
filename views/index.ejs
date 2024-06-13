@@ -1,0 +1,72 @@
+<html>
+	<head>
+		<title>Регистрация </title>
+	</head>
+	<link rel="stylesheet" href="/css/main.css">
+	<script src="https://telegram.org/js/telegram-web-app.js"></script>
+	<body>
+		<h1>Отправка рейса в реестр</h1>
+		<% if(failed==1){%>
+		<p class="inputErr">Укажите полные данные! </p>
+		<%}%>
+		<p>Укажите данные по рейсу</p>
+		<form method="post" action="/submit">
+		<h3>Дата</h3>
+		<input required type="date" id="date" name="date" value=""/>
+		<h3>Гос. номер автомобиля</h3>
+		<select name="autoNo" id="autoNo">
+			<option disabled selected hidden>Выберите свой гос. номер</option>
+			<% autoNumbers.forEach((el) =>{ %>
+			<option value="<%=el%>"><%=el%></option>
+			<% })%>
+		</select>
+		<h3>Порода дерева</h3>
+		<select name="woodSpecies" id="woodSpecies" required>
+			<option disabled hidden>Выберите породу</option>
+			<option value="Сосна">Сосна</option>
+			<option value="Ель">Ель</option>
+			<option value="Пихта">Пихта</option>
+			<option value="Лиственница">Лиственница</option>
+			<option value="Берёза">Берёза</option>
+			<option value="Осина">Осина</option>
+			<option value="Хвоя (для дров)">Хвоя (для дров)</option>
+		</select>
+		<h3>Сортимент</h3>
+		<select name="sortiment" id="sortiment">
+			<option disabled selected hidden value="">Выберите сортимент</option>
+			<option value="Бревно (пилач)">Бревно (пилач)</option>
+			<option value="Балансы (тонкомер)">Балансы (тонкомер)</option>
+			<option value="Дрова">Дрова</option>
+		</select>
+		<h3>Вывозка или погрузка</h3>
+		<select name="rideType" id="rideType">
+			<option disabled selected hidden value="">Выберите тип поездки</option>
+			<option value="1">Вывозка</option>
+			<option value="2">Погрузка</option>
+		</select>
+		<h3>Откуда (Квартал)</h3> 	
+		<select name="rideFrom" id="rideFrom">
+			<option disabled selected hidden value="">Выберите квартал</option>
+			<option value="q19">Квартал 19</option>
+			<option value="q30">Квартал 30</option>
+			<option value="q38">Квартал 38</option>
+			<option value="q34">Квартал 34</option>
+			<option value="q23">Квартал 23</option>
+			<option value="q27">Квартал 27</option>
+		</select>
+		<h3>Куда (Склад или адрес)</h3>
+		<select name="rideTo" id="rideTo">
+			<option disabled selected hidden value="">Выберите пункт назначения</option>
+			<option value="Склад квартал 19">Склад квартал 19</option>
+			<option value="Склад Никитино - Юг">Склад Никитино - Юг</option>
+			<option value="Д.Никитино ул.Восточная д.3">Д.Никитино ул.Восточная д.3</option>
+			<option value="Д.Северная ул. Красноармейская д.54">Д.Северная ул. Красноармейская д.54</option>
+			<option value="withdrawMGorkogo">Д.Северная ул.Максима Горького д.21</option>
+		</select>
+
+		<h3>Количество рейсов</h3><br>
+		<input type="number" id="ridesCount" name="ridesCount"/><br><br>
+		<input type="submit" value="Отправить" class="submit">
+		</form>
+	</body>
+</html>

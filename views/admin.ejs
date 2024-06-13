@@ -1,0 +1,88 @@
+<html>
+	<head>
+		<title>Admin </title>
+			<link rel="stylesheet" href="/css/main_admin.css">
+	</head>
+	<body>
+			<a href="/admin/download"><button >Скачать Excel</button></a>
+			<a href="/admin/users"><button>Изменить пользователей к боту</button></a>
+			<a href="/admin/destinations"><button>Изменить пункты назначения</button></a>
+			<a href="/admin/loadouts"><button>Изменить пункты вывоза</button></a>
+			<a href="/admin/loadins"><button>Изменить варианты пород дерева</button></a>
+			<a href="/admin/sortiments"><button>Изменить варианты сортиментов</button></a>	
+			<div class="area"><% if (action === 'download'){%>
+			<form method="post" action="/download">
+			<p>Выберите месяц<p>
+				<select name="mounth" id="mounth" required>
+					<option selected hidden value="">
+					<%= query.mounth%>
+					</option>
+					<option value="Январь">Январь</option>
+					<option value="Февраль">Февраль</option>
+					<option value="Март">Март</option>
+					<option value="Апрель">Апрель</option>
+					<option value="Май">Май</option>
+					<option value="Июнь">Июнь</option>
+					<option value="Июль">Июль</option>
+					<option value="Август">Август</option>
+					<option value="Сентябрь">Сентябрь</option>
+					<option value="Октябрь">Октябрь</option>
+					<option value="Ноябрь">Ноябрь</option>
+					<option value="Декабрь">Декабрь</option>
+				</select>
+				<button type=submit>Скачать</button>
+			</form>
+			<%if (options.optionName === "err" ){%>
+				<p id="displayName">Ошибка. Обновите страницу.</p>
+				<%}%>
+			<%} if (action==="users" ||action==="destinations" || action==="loadouts" || action==="loadins" || action==="sortiments"){%>
+				<p id="displayName"><%=options.displayName%></p>
+				<%for (item in options.savedValues){ %>
+					<p></p><input type="text" value ="<%=options.savedValues[item] %>" id="<%=item%>" class="existingOption"></input>
+			<%} %>
+			<p></p><input type="text" id="newValue" class="newOption"></input>
+			<input type="button" value="Сохранить" id="addButton">
+		<%}%>
+
+			</div>
+			<script>
+				async function sendUpdate(newOption){
+					let response = await fetch('/updateOptions', {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify(newOption)
+					});
+					if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+		let result = await response.json();
+
+		if (result) {
+			setTimeout(() => {
+				window.location.reload();
+			}, 150)
+        }
+				}
+				document.getElementById('addButton').onclick = () => {
+					let newOption = {"savedValues":{}};
+					const displayName = document.getElementById("displayName").textContent;
+					const button=document.getElementById("addButton");
+					button.setAttribute("disabled","disabled");
+					let gotElements = document.getElementsByClassName('existingOption');
+					let i = 0;
+					for (item in gotElements){
+						if (gotElements[item].value){
+						newOption.savedValues[i]=gotElements[item].value;
+						i++;
+						}
+					}
+					i++;
+					if (document.getElementById("newValue").value){
+						newOption.savedValues[i]=document.getElementById("newValue").value;
+					}
+					newOption["displayName"]=displayName;
+					sendUpdate(newOption);
+				};
+			</script>
+	</body>
+</html>
