@@ -8,7 +8,6 @@
 	app.set('view engine','ejs');
 	app.use(express.static('public'));
 	app.use(express.urlencoded({extended: false}));
-
 	const MongoClient = require('mongodb').MongoClient;
 	const url = process.env.URL;
 	const mongoClient = new MongoClient(url, {
@@ -18,6 +17,42 @@
 		waitQueueTimeoutMS: 5000
 	});
 	const PORT = process.env.PORT;
+	async function initDB(){
+		try{
+			await mongoClient.connect();
+			const db = mongoClient.db("main");
+			const options = db.collection("options");
+			const replies = db.collection("replies");
+			const checkOpt = await options.find({}).toArray();
+			const checkRep = await replies.find({}).toArray();
+			let resultOpt = false;
+			let resultRep = false;
+			if (checkOpt.length>0){
+				resultOpt = true;
+			} else {
+				options.insertOne({optionName:"loadins",displayName:"Породы",savedValues:{}});
+				options.insertOne({optionName:"loadouts",displayName:"Пункты вывоза",savedValues:{}});
+				options.insertOne({optionName:"destinations",displayName:"Пункты выгрузки",savedValues:{}});
+				options.insertOne({optionName:"sortiments",displayName:"Сортименты",savedValues:{}});
+				resultOpt = "fixed";
+			}
+			if (checkRep.length>0){
+				resultRep = true;
+			} else {
+				replies.insertOne({nextButtons:"loadins",state:"dateRegistered",stateToChange:"loadinsRegistered",textForNextMessage:"Укажите породу дерева"});
+				replies.insertOne({nextButtons:"sortiments",state:"loadinsRegistered",stateToChange:"sortimentSet",textForNextMessage:"Укажите сортимент"});
+				replies.insertOne({nextButtons:"loadouts",state:"sortimentSet",stateToChange:"loadoutsSet",textForNextMessage:"Откуда везём"});
+				replies.insertOne({nextButtons:"destinations",state:"loadoutsSet",stateToChange:"endStage",textForNextMessage:"Куда везём"});
+				replies.insertOne({nextButtons:null,state:"endStage",stateToChange:null,textForNextMessage:"Укажите количество рейсов"});
+				resultRep = "fixed";
+			}
+			return {resultOpt, resultRep};
+		} catch(err) {
+			console.log(err);
+		}
+		
+	}
+
 	async function getOptions(option){
 		try{
 			await mongoClient.connect();
@@ -239,5 +274,8 @@
 	})
 
 	app.listen(PORT, () => {
+		initDB().then(res =>{
+			console.log(res);
+		});
 		console.log('Server is running');
 	})
