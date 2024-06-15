@@ -16,6 +16,7 @@
 		maxIdleTimeMS: 30000,
 		waitQueueTimeoutMS: 5000
 	});
+	const autoNumbers=[197,737,327,281,947,221,814];
 	const PORT = process.env.PORT;
 	async function initDB(){
 		try{
@@ -34,6 +35,7 @@
 				options.insertOne({optionName:"loadouts",displayName:"Пункты вывоза",savedValues:{}});
 				options.insertOne({optionName:"destinations",displayName:"Пункты выгрузки",savedValues:{}});
 				options.insertOne({optionName:"sortiments",displayName:"Сортименты",savedValues:{}});
+				options.insertOne({optionName:"rideType",displayName:"Типы поездки",savedValues:{"0":'Выгрузка',"1":"Погрузка"}});
 				resultOpt = "fixed";
 			}
 			if (checkRep.length>0){
@@ -42,7 +44,8 @@
 				replies.insertOne({nextButtons:"loadins",state:"dateRegistered",stateToChange:"loadinsRegistered",textForNextMessage:"Укажите породу дерева"});
 				replies.insertOne({nextButtons:"sortiments",state:"loadinsRegistered",stateToChange:"sortimentSet",textForNextMessage:"Укажите сортимент"});
 				replies.insertOne({nextButtons:"loadouts",state:"sortimentSet",stateToChange:"loadoutsSet",textForNextMessage:"Откуда везём"});
-				replies.insertOne({nextButtons:"destinations",state:"loadoutsSet",stateToChange:"endStage",textForNextMessage:"Куда везём"});
+				replies.insertOne({nextButtons:"destinations",state:"loadoutsSet",stateToChange:"rideType",textForNextMessage:"Куда везём"});
+				replies.insertOne({nextButtons:"rideType",state:"rideType",stateToChange:"endStage",textForNextMessage:"Выберите тип поездки"});
 				replies.insertOne({nextButtons:null,state:"endStage",stateToChange:null,textForNextMessage:"Укажите количество рейсов"});
 				resultRep = "fixed";
 			}
