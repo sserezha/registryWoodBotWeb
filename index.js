@@ -236,12 +236,10 @@
 
 	app.get('/admin/:action', (req,res) =>{
 		const users = getUsers().then(users=>{
-			return users
+			getOptions(req.params.action).then (result=>{
+				res.render('admin',{action: req.params.action, query: req.query, options: result[0], userList: users});
+			});
 		})
-		getOptions(req.params.action).then (result=>{
-			res.render('admin',{action: req.params.action, query: req.query, options: result[0], userList: users});
-		});
-
 		});
 
 	app.get('/success', (req,res) =>{
