@@ -2,6 +2,7 @@
     animation: blink 0.3s infinite;
 	animation-iteration-count: 3;
    }
+
    @keyframes blink {
     from { color: red;}
     to { color: white;}
@@ -19,10 +20,9 @@ p{
 				align-items: center;
 				flex-direction: column
 			}
-
-		a {
-			color: #00B7FF;
-		}
+			a {
+				color:rgb(26, 192, 26);
+			}
 
 		input, select {
 			width: 400px;

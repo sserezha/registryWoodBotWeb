@@ -119,7 +119,25 @@
 	let gotMounth = 'Февраль';
 	console.log(mounths.get(gotMounth));
 	//end of test
-
+async function updateUser(UID){
+	try{
+		await mongoClient.connect();
+		const db = mongoClient.db("main");
+		const collection = db.collection("users");
+		const user = collection.find({id:UID}).toArray();
+		if(user.state !=6){
+			collection.updateOne({id:UID},{$set:{state:6, beforeBan:user.state}});
+		} else {
+			collection.updateOne({id:UID},{$set:{state:user.beforeBan}});
+		}
+		
+		
+	} catch(err){
+		console.log(err);
+	} finally{
+		mongoClient.close();
+	}
+}
 	async function getFromDB(gotMounth,gotYear){
 		try {
 			let gotYear='2024';
@@ -235,7 +253,7 @@
 	});
 
 	app.get('/admin/:action', (req,res) =>{
-		const users = getUsers().then(users=>{
+		getUsers().then(users=>{
 			getOptions(req.params.action).then (result=>{
 				res.render('admin',{action: req.params.action, query: req.query, options: result[0], userList: users});
 			});
@@ -255,6 +273,15 @@
 			});
 			
 		});
+
+		app.post('/updateUser', (req, res) => {
+			const value = req.body;
+				updateUser(value).then(res2 =>{
+					console.log("updated with "+ value["displayName"]);
+					res.json(value);
+				});
+				
+			});
 
 
 	app.post('/submit', (req,res) =>{

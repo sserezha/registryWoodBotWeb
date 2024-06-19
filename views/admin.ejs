@@ -57,7 +57,7 @@
 					<td><%=el.name%></td>
 					<td><%=el.autoNo%></td>
 					<td><%=el.id%></td>
-					<td><%if (el.state === 6){%><div class="cl-btn-7" id=<%=el.id%></div><%} else { %><div class="cl-btn-6" id=<%=el.id%><%}%></div></td>
+					<td><%if (el.state === 6){%><a href=# class="restore" id=<%=el.id%>>✓</a><%} else { %><a href=# class="delete" id=<%=el.id%>>×</a><%}%></td>
 				</tr>
 				
 			<%})%>
@@ -84,6 +84,12 @@
 			}, 150)
         }
 				}
+				document.getElementsByClassName('cl-btn-7').onClick = () => {
+					console.log("delete")
+				};
+				document.getElementsByClassName('cl-btn-6').onClick = () => {
+					console.log("restore")
+				};
 				document.getElementById('addButton').onclick = () => {
 					let newOption = {"savedValues":{}};
 					const displayName = document.getElementById("displayName").textContent;
