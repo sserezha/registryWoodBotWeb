@@ -57,7 +57,7 @@
 					<td><%=el.name%></td>
 					<td><%=el.autoNo%></td>
 					<td><%=el.id%></td>
-					<td><%if (el.state === 6){%><button class="restore" id=<%=el.id%>>✓</button><%} else { %><button class="delete" id=<%=el.id%>>×</button><%}%></td>
+					<td><%if (el.state === 6){%><button title="Восстановить доступ" class="restore" id=<%=el.id%>>✓</button><%} else { %><button title="Закрыть доступ" class="delete" id=<%=el.id%>>×</button><%}%></td>
 				</tr>
 				
 			<%})%>
