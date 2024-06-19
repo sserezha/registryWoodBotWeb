@@ -18,6 +18,19 @@
 	});
 	const autoNumbers=[197,737,327,281,947,221,814];
 	const PORT = process.env.PORT;
+	async function getUsers(){
+		try{
+			await mongoClient.connect();
+		const db = mongoClient.db("main");
+		const users = db.collection("users");
+		const allUsers = await users.find({}).toArray();
+		return allUsers;
+	}catch(err){
+		console.log(err);
+	} finally {
+		await mongoClient.close();
+	}
+	}
 	async function initDB(){
 		try{
 			await mongoClient.connect();
@@ -222,9 +235,11 @@
 	});
 
 	app.get('/admin/:action', (req,res) =>{
+		const users = getUsers();
 		getOptions(req.params.action).then (result=>{
-			res.render('admin',{action: req.params.action, query: req.query, options: result[0]});
+			res.render('admin',{action: req.params.action, query: req.query, options: result[0], userList: users});
 		});
+
 		});
 
 	app.get('/success', (req,res) =>{

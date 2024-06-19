@@ -35,7 +35,7 @@
 			<%if (options.optionName === "err" ){%>
 				<p id="displayName">Ошибка. Обновите страницу.</p>
 				<%}%>
-			<%} if (action==="users" ||action==="destinations" || action==="loadouts" || action==="loadins" || action==="sortiments"){%>
+			<%} if (action==="destinations" || action==="loadouts" || action==="loadins" || action==="sortiments"){%>
 				<p id="displayName"><%=options.displayName%></p>
 				<%for (item in options.savedValues){ %>
 					<p></p><input type="text" value ="<%=options.savedValues[item] %>" id="<%=item%>" class="existingOption"></input>
@@ -43,6 +43,24 @@
 			<p></p><input type="text" id="newValue" class="newOption"></input>
 			<input type="button" value="Сохранить" id="addButton">
 		<%}%>
+		<%if (options.optionName === "users" ){%>
+			<table>
+				<tr>
+					<th>Имя</th>
+					<th>Номер авто</th>
+					<th>Telegram chat ID</th>
+					<th>Действия</th>
+				</tr>
+			<%userList.forEach((el) =>{%>
+				<tr>
+					<td><%=el.name%></td>
+					<td><%=el.autoNo%></td>
+					<td><%=el.id%></td>
+					<td></td>
+				</tr>
+				</table>
+			<%})%>
+			<%}%>
 
 			</div>
 			<script>
