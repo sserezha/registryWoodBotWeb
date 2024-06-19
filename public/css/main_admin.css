@@ -22,7 +22,6 @@
     border-radius: 40px;
     position: relative;
     z-index: 1;
-    margin: 20px auto;
     cursor: pointer;
 }
 .cl-btn-7:before {
