@@ -235,7 +235,9 @@
 	});
 
 	app.get('/admin/:action', (req,res) =>{
-		getUsers().then(users)
+		getUsers().then(users=>{
+			return users;
+		})
 		getOptions(req.params.action).then (result=>{
 			res.render('admin',{action: req.params.action, query: req.query, options: result[0], userList: users});
 		});
