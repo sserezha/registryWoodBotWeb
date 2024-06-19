@@ -57,9 +57,11 @@
 					<td><%=el.name%></td>
 					<td><%=el.autoNo%></td>
 					<td><%=el.id%></td>
-					<td><div class="cl-btn-7"></div></td>
+					<td><%if (el.state === 6){%><div class="cl-btn-7" id="<%=el.id%>"<%} else { <div class="cl-btn-6" id='<%=el.id%>'<%}%>></div></td>
 				</tr>
+				
 			<%})%>
+			
 		</table>
 			<%}%>
 
