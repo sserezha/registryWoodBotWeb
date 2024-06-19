@@ -48,7 +48,7 @@
 				options.insertOne({optionName:"loadouts",displayName:"Пункты вывоза",savedValues:{}});
 				options.insertOne({optionName:"destinations",displayName:"Пункты выгрузки",savedValues:{}});
 				options.insertOne({optionName:"sortiments",displayName:"Сортименты",savedValues:{}});
-				options.insertOne({optionName:"rideType",displayName:"Типы поездки",savedValues:{"0":'Выгрузка',"1":"Погрузка"}});
+				// options.insertOne({optionName:"rideType",displayName:"Типы поездки",savedValues:{"0":'Выгрузка',"1":"Погрузка"}});
 				resultOpt = "fixed";
 			}
 			if (checkRep.length>0){
@@ -119,23 +119,27 @@
 	let gotMounth = 'Февраль';
 	console.log(mounths.get(gotMounth));
 	//end of test
-async function updateUser(UID){
+async function changeAccessUser(UID){
 	try{
+		let userID = parseInt(UID);
 		await mongoClient.connect();
 		const db = mongoClient.db("main");
 		const collection = db.collection("users");
-		const user = collection.find({id:UID}).toArray();
-		if(user.state !=6){
-			collection.updateOne({id:UID},{$set:{state:6, beforeBan:user.state}});
+		const user = await collection.find({"id":userID}).toArray();
+		const userState = user[0].state;
+		if(userState !=6){
+			const res = await collection.updateOne({"id":userID},{$set:{state:6, beforeBan:userState}});
+			console.log(res)
 		} else {
-			collection.updateOne({id:UID},{$set:{state:user.beforeBan}});
+			const res = await collection.updateOne({"id":userID},{$set:{state:user[0].beforeBan}});
+			console.log(res)
 		}
 		
 		
 	} catch(err){
 		console.log(err);
 	} finally{
-		mongoClient.close();
+		await mongoClient.close();
 	}
 }
 	async function getFromDB(gotMounth,gotYear){
@@ -275,12 +279,16 @@ async function updateUser(UID){
 		});
 
 		app.post('/updateUser', (req, res) => {
-			const value = req.body;
-				updateUser(value).then(res2 =>{
-					console.log("updated with "+ value["displayName"]);
+			try{
+				const value = req.body;
+				changeAccessUser(value.id).then(res2 =>{
+					console.log("updated with "+ value.id);
 					res.json(value);
 				});
 				
+			}catch(err){
+				console.log(err);
+			}
 			});
 
 

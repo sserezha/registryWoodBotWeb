@@ -57,7 +57,7 @@
 					<td><%=el.name%></td>
 					<td><%=el.autoNo%></td>
 					<td><%=el.id%></td>
-					<td><%if (el.state === 6){%><a href=# class="restore" id=<%=el.id%>>✓</a><%} else { %><a href=# class="delete" id=<%=el.id%>>×</a><%}%></td>
+					<td><%if (el.state === 6){%><button class="restore" id=<%=el.id%>>✓</button><%} else { %><button class="delete" id=<%=el.id%>>×</button><%}%></td>
 				</tr>
 				
 			<%})%>
@@ -84,13 +84,44 @@
 			}, 150)
         }
 				}
-				document.getElementsByClassName('cl-btn-7').onClick = () => {
-					console.log("delete")
+				async function changeAccess(ID){
+					let response = await fetch('/updateUser', {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({ id: ID })
+					});
+					if (!response.ok) {
+							console.log(response);
+							throw new Error('Network response was not ok');
+						}
+		let result = await response.json();
+
+		if (result) {
+			setTimeout(() => {
+				window.location.reload();
+			}, 150)
+        }
+				}
+				let restoreButtons = document.getElementsByClassName('restore');
+				let deleteButtons = document.getElementsByClassName('delete');
+				for (element in deleteButtons) {
+					if(deleteButtons[element].id){
+						let id = deleteButtons[element].id;
+						document.getElementById(deleteButtons[element].id).onclick = () => {
+							changeAccess(id);
+						}
+					}
 				};
-				document.getElementsByClassName('cl-btn-6').onClick = () => {
-					console.log("restore")
+				for (element in restoreButtons) {
+					if(restoreButtons[element].id){
+						let id = restoreButtons[element].id;
+						document.getElementById(restoreButtons[element].id).onclick = () => {
+							changeAccess(id);
+						}
+					}
 				};
-				document.getElementById('addButton').onclick = () => {
+				try{
+					document.getElementById('addButton').onclick = () => {
 					let newOption = {"savedValues":{}};
 					const displayName = document.getElementById("displayName").textContent;
 					const button=document.getElementById("addButton");
@@ -109,6 +140,8 @@
 					}
 					newOption["displayName"]=displayName;
 					sendUpdate(newOption);
+				}}catch(err){
+					console.log("No Save Button");
 				};
 			</script>
 	</body>

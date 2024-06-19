@@ -7,18 +7,36 @@
     to { color: white;}
    }
    .restore{
+	width: 40px;
+	height: 40px;
 	color:rgb(26, 192, 26);
 	font-size: 1.3em;
-	border-style: solid;
-	border-radius: 3px;
+	border-radius: 20px;
 	font-style: bold;
+	background-color: #615b4d;
+   }
+   .restore:hover{
+	color:rgb(0, 255, 0);
+	font-size: 1.5em;
+	border-radius: 38px;
+	background-color: #35322b;
+	transition-duration: 400ms;
    }
    .delete{
-	color: rgb(255, 81, 0);
+	width: 40px;
+	height: 40px;
+	color: rgb(255, 23, 23);
+	background-color: #615b4d;
 	font-size: 1.5em;
-	border-style: solid;
-	border-radius: 1px;
+	border-radius: 20px;
 	font-style: bold;
+   }
+   .delete:hover{
+	color: rgb(255, 0, 0);
+	font-size: 1.5em;
+	border-radius: 38px;
+	background-color: #35322b;
+	transition-duration: 400ms;
    }
    #users {
 	font-family: Arial, Helvetica, sans-serif;
