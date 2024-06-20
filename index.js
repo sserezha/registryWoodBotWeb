@@ -4,6 +4,7 @@
 	const app = express();
 	const bodyParser = require('body-parser');
 	const dotenv = require('dotenv').config();
+	const cookieParser = require('cookie-parser');
 	app.use(bodyParser.json());
 	app.set('view engine','ejs');
 	app.use(express.static('public'));
@@ -18,6 +19,7 @@
 	});
 	const autoNumbers=[197,737,327,281,947,221,814];
 	const PORT = process.env.PORT;
+	app.use(cookieParser());
 	async function getUsers(){
 		try{
 			await mongoClient.connect();
@@ -119,6 +121,12 @@
 	let gotMounth = 'Февраль';
 	console.log(mounths.get(gotMounth));
 	//end of test
+
+	const adminMiddleware = (req, res, next) => {
+		if (req.cookies.username == "test"){next();}
+		else {res.render('auth')}
+	};
+	
 async function changeAccessUser(UID){
 	try{
 		let userID = parseInt(UID);
@@ -252,11 +260,11 @@ async function changeAccessUser(UID){
 		
 	});
 
-	app.get('/admin/', (req,res) =>{
+	app.get('/admin/', adminMiddleware, (req,res) =>{
 		res.render('admin',{action: req.params.action});
 	});
 
-	app.get('/admin/:action', (req,res) =>{
+	app.get('/admin/:action', adminMiddleware, (req,res) =>{
 		getUsers().then(users=>{
 			getOptions(req.params.action).then (result=>{
 				res.render('admin',{action: req.params.action, query: req.query, options: result[0], userList: users});
