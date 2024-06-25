@@ -173,7 +173,7 @@ async function changeAccessUser(UID){
 			let foundResult = checkDate(findResult);
 			foundResult.forEach((item,index) =>{
 				let row = index+2;
-				let keys = ['A'+row,'B'+row, 'C'+row, 'D'+row, 'E'+row, 'F'+row, 'G'+row, 'H'+row];
+				let keys = ['A'+row,'B'+row, 'C'+row, 'D'+row, 'E'+row, 'F'+row, 'G'+row];//, 'H'+row];
 				keys.forEach((key,kIndex)=>{
 					let type='';
 					let val = '';
@@ -194,21 +194,21 @@ async function changeAccessUser(UID){
 						val = item.enteredData.sortiment;
 						type = 's';
 						break
+						// case 4:
+						// if (item.enteredData.rideType === 1) {
+						// 	val='Вывозка';
+						// } else {val='Погрузка';}
+						// type = 's';
+						// break
 						case 4:
-						if (item.enteredData.rideType === 1) {
-							val='Вывозка';
-						} else {val='Погрузка';}
-						type = 's';
-						break
-						case 5:
 						val = item.enteredData.rideFrom;
 						type = 's';
 						break
-						case 6:
+						case 5:
 						val = item.enteredData.rideTo;
 						type = 's';
 						break
-						case 7:
+						case 6:
 						val = item.enteredData.ridesCount;
 						type = 's';
 						break
