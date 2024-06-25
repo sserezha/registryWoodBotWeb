@@ -103,28 +103,25 @@
 		} finally {
 			await mongoClient.close();
 		}
-	}//test
-	var mounths = new Map ([
-		['Январь','-01-'],
-		["Февраль",'-02-'],
-		['Март','-03-'],
-		['Апрель','-04-'],
-		['Май','-05-'],
-		['Июнь','-06-'],
-		['Июль','-07-'],
-		['Август','-08-'],
-		['Сентябрь','-09-'],
-		['Октябрь','-10-'],
-		['Ноябрь','-11-'],
-		['Декабрь','-12-'],
-	]);
-	let gotMounth = 'Февраль';
-	console.log(mounths.get(gotMounth));
-	//end of test
+	}
 
 	const adminMiddleware = (req, res, next) => {
 		if (req.cookies.username != "test"){next();}
-		else {res.render('auth')}
+		else {
+	const codeRequest = {requestcode:1}
+
+	fetch("http://localhost:3000/codeReq", {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(codeRequest),
+	})
+    .then(response => response.text())
+    .then(text => console.log(text))
+    .catch(error => console.error('Error:', error));
+			res.render('auth')
+		}
 	};
 	
 async function changeAccessUser(UID){
