@@ -123,7 +123,7 @@
 	//end of test
 
 	const adminMiddleware = (req, res, next) => {
-		if (req.cookies.username == "test"){next();}
+		if (req.cookies.username != "test"){next();}
 		else {res.render('auth')}
 	};
 	
