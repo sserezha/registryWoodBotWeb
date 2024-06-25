@@ -13,24 +13,9 @@
 			<div class="area"><% if (action === 'download'){%>
 			<form method="post" action="/download">
 			<p>Выберите месяц<p>
-				<select name="mounth" id="mounth" required>
-					<option selected hidden value="">
-					<%= query.mounth%>
-					</option>
-					<option value="Январь">Январь</option>
-					<option value="Февраль">Февраль</option>
-					<option value="Март">Март</option>
-					<option value="Апрель">Апрель</option>
-					<option value="Май">Май</option>
-					<option value="Июнь">Июнь</option>
-					<option value="Июль">Июль</option>
-					<option value="Август">Август</option>
-					<option value="Сентябрь">Сентябрь</option>
-					<option value="Октябрь">Октябрь</option>
-					<option value="Ноябрь">Ноябрь</option>
-					<option value="Декабрь">Декабрь</option>
-				</select>
-				<button type=submit>Скачать</button>
+				<input type="month" name="mounth" id="mounth" required>
+			<p>
+				<button type=submit>Скачать</button></p>
 			</form>
 			<%if (options.optionName === "err" ){%>
 				<p id="displayName">Ошибка. Обновите страницу.</p>

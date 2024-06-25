@@ -95,9 +95,7 @@
 			await mongoClient.connect();
 			const db = mongoClient.db("main");
 			const collection = db.collection(dbname);
-			const result = await collection.insertOne(dataToWrite);
-			console.log(result);
-			console.log(dataToWrite);
+			await collection.insertOne(dataToWrite);
 		}catch(err) {
 			console.log(err);
 		} finally {
@@ -118,7 +116,6 @@
 		body: JSON.stringify(codeRequest),
 	})
     .then(response => response.text())
-    .then(text => console.log(text))
     .catch(error => console.error('Error:', error));
 			res.render('auth')
 		}
@@ -134,34 +131,31 @@ async function changeAccessUser(UID){
 		const userState = user[0].state;
 		if(userState !=6){
 			const res = await collection.updateOne({"id":userID},{$set:{state:6, beforeBan:userState}});
-			console.log(res)
 		} else {
 			const res = await collection.updateOne({"id":userID},{$set:{state:user[0].beforeBan}});
-			console.log(res)
 		}
-		
-		
 	} catch(err){
 		console.log(err);
 	} finally{
 		await mongoClient.close();
 	}
 }
-	async function getFromDB(gotMounth,gotYear){
+
+	async function getFromDB(date){
 		try {
-			let gotYear='2024';
-			let mounth = mounths.get(gotMounth);
+			let parts = date.split("-");
+			let mounth = parts[1];
+			let year = parts[0];
 			await mongoClient.connect();
 			const db = mongoClient.db("main");
 			const collection = db.collection('registry');
 			const findResult = await collection.find({}).toArray();
 		var excellFile = XLSX.readFile('registry_.xlsx', {cellDates:true, cellStyles: true});
-		console.log(excellFile);
 			excellFile.Sheets.Лист1['!ref'] = 'A1:K200'
 			function checkDate(){
 				const result = [];
 				findResult.forEach((itemFirst) => {
-					if (itemFirst.enteredData.date.includes(mounth) && itemFirst.enteredData.date.includes(gotYear)){
+					if (itemFirst.enteredData.date.includes(mounth) && itemFirst.enteredData.date.includes(year)){
 						result.push(itemFirst);
 						};
 				});
@@ -231,7 +225,6 @@ async function changeAccessUser(UID){
 	}
 	async function updateOptions(newOptions){
 		try{
-			console.log(newOptions.savedValues);
 			const toAdd = newOptions.savedValues;
 			await mongoClient.connect();
 			const db = mongoClient.db("main");
@@ -277,7 +270,6 @@ async function changeAccessUser(UID){
 	app.post('/updateOptions', (req, res) => {
 		const value = req.body;
 			updateOptions(value).then(res2 =>{
-				console.log("updated with "+ value["displayName"]);
 				res.json(value);
 			});
 			
@@ -287,7 +279,6 @@ async function changeAccessUser(UID){
 			try{
 				const value = req.body;
 				changeAccessUser(value.id).then(res2 =>{
-					console.log("updated with "+ value.id);
 					res.json(value);
 				});
 				
@@ -298,31 +289,23 @@ async function changeAccessUser(UID){
 
 
 	app.post('/submit', (req,res) =>{
-		console.log(req.body);
 		let enteredData = req.body;
 		let database = 'registry';
-		console.log(enteredData);
-		console.log('~~~~~~~~~~~');
-		console.log(Object.keys(enteredData).length);
-		console.log('~~~~~~~~~~~');
 		if (Object.keys(enteredData).length != 8){
-			console.log('not inserted with error');
 			return res.redirect('/?fail=1');
 		}
 		
 		else {
 				writeToDB({enteredData}, database);
-				console.log('inserted');
 				return res.redirect('/success');
 		}
 	});
 
 	app.post('/download', (req,res) =>{
 		let toDownload = '';
-		console.log(req.body.mounth);
 		getFromDB(req.body.mounth).then(result=>{
-		console.log(result);
 		res.download(result);
+		console.log(req.body);
 	});
 
 		});
