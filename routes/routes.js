@@ -24,7 +24,6 @@ router.get('/?fail', (req, res) => {
 });
 
 router.get('/admin/', adminMiddleware, (req,res) =>{
-    console.log("checkauth="+mongoFunctions.checkAuth(req.cookies.auth))
 	res.render('admin',{action: req.params.action});
 });
 
@@ -63,7 +62,6 @@ try{
 
     router.post('/checkCode', async (req,res) => {
 	const reqResult = await mongoFunctions.checkCode(req.body.code);
-    console.log(reqResult)
 	res.json(reqResult);
 })
 
@@ -96,7 +94,6 @@ router.post('/submit', (req,res) =>{
 router.post('/download', (req,res) =>{
 	mongoFunctions.getFromDB(req.body.mounth).then(result=>{
 		res.download(result);
-		console.log(req.body);
 	});
 
 });

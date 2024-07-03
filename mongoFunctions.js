@@ -208,7 +208,6 @@ async function checkAuth(phone){
     const users = db.collection("users");
     if (phone){
         const user = await users.find({"phone":phone}).toArray();
-        console.log("checkAuth func user = "+JSON.stringify(user));
         if (user.length>0){
             return true;
         } else {
