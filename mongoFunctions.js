@@ -206,10 +206,14 @@ async function checkAuth(phone){
     await mongoClient.connect();
     const db = mongoClient.db("main");
     const users = db.collection("users");
-    const user = await users.find({"phone":phone}).toArray();
-    console.log("checkAuth func user = "+JSON.stringify(user));
-    if (user.length>0){
-        return true;
+    if (phone){
+        const user = await users.find({"phone":phone}).toArray();
+        console.log("checkAuth func user = "+JSON.stringify(user));
+        if (user.length>0){
+            return true;
+        } else {
+            return false;
+        }
     } else {
         return false;
     }

@@ -4,12 +4,7 @@ const autoNumbers=[197,737,327,281,947,221,814];
 const mongoFunctions = require("../mongoFunctions");
 
 const adminMiddleware = async (req, res, next) => {
-    const phone = req.cookies.auth;
-    let check = "not authorized"
-    if (req.cookies.auth){
-        const check = await mongoFunctions.checkAuth(req.cookies.auth);
-    }
-    console.log("check = "+check+" || req.cookies.auth = "+req.cookies.auth);
+    const check = await mongoFunctions.checkAuth(req.cookies.auth);
 	if (check){
         next();
     }
