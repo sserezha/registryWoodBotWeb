@@ -1,8 +1,13 @@
 const XLSX = require("xlsx");
+const dotenv = require('dotenv').config();
 const MongoClient = require('mongodb').MongoClient;
 const url = process.env.URL;
-const mongoClient = new MongoClient(url);
-const dotenv=require("dotenv").config();
+const mongoClient = new MongoClient(url, {
+	maxPoolSize: 100,
+	minPoolSize: 10,
+	maxIdleTimeMS: 30000,
+	waitQueueTimeoutMS: 5000
+});
 
 async function initDB(){
     try{
@@ -196,6 +201,23 @@ async function getUsers(){
 }
 }
 
+async function checkCode(code){
+    try{
+        await mongoClient.connect();
+        const db = mongoClient.db("main");
+        const users = db.collection("users");
+        const user = await users.find({"code":parseInt(code)}).toArray();
+        console.log(user, code);
+        if (user){
+            return user;
+        } else {
+            return "not found";
+        }
+    } catch(err){
+        console.log(err);
+    }
+};
+
 module.exports = {
-    initDB, getOptions, writeToDB, changeAccessUser, getFromDB, updateOptions, getUsers, changeAdminAccessUser
+    initDB, getOptions, writeToDB, changeAccessUser, getFromDB, updateOptions, getUsers, changeAdminAccessUser, checkCode
 };

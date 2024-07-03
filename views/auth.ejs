@@ -9,6 +9,39 @@
 	<body>
 		<h1>Не авторизован</h1>
         <p>Введи код из Telegram</p>
-        <input type="text" id="code"></input>
+        <input type="text" id="code" maxlength="6"></input>
+		<script>
+			async function checkCode(code){
+					let response = await fetch('/checkCode', {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({ code: code })
+					});
+					if (!response.ok) {
+							throw new Error('Network response was not ok');
+						}
+					let result = await response.json();
+
+					if (result) {
+						return result;
+						// setTimeout(() => {
+						// 	window.location.reload();
+						// }, 150)
+					}
+				};
+
+				function saveAuth(user){
+					
+				}
+				const textInput = document.getElementById('code');	
+				textInput.addEventListener('input', async (event) => {
+					const currentValue = event.target.value;
+					if (currentValue.length == 6){
+						const user = await checkCode(currentValue);
+						
+						window.location.href = "/auth/"+user[0];
+					}
+				});
+		</script>
 	</body>
 </html>
