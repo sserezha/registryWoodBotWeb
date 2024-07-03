@@ -84,9 +84,29 @@ async function changeAccessUser(UID){
 		const user = await collection.find({"id":userID}).toArray();
 		const userState = user[0].state;
 		if(userState !=6){
-			const res = await collection.updateOne({"id":userID},{$set:{state:6, beforeBan:userState}});
+			await collection.updateOne({"id":userID},{$set:{state:6, beforeBan:userState}});
 		} else {
-			const res = await collection.updateOne({"id":userID},{$set:{state:user[0].beforeBan}});
+			await collection.updateOne({"id":userID},{$set:{state:user[0].beforeBan}});
+		}
+	} catch(err){
+		console.log(err);
+	} finally{
+		await mongoClient.close();
+	}
+}
+
+async function changeAdminAccessUser(UID){
+	try{
+		let userID = parseInt(UID);
+		await mongoClient.connect();
+		const db = mongoClient.db("main");
+		const collection = db.collection("users");
+		const user = await collection.find({"id":userID}).toArray();
+		const userState = user[0].adminFlag;
+		if(userState && userState == 1){
+			await collection.updateOne({"id":userID},{$set:{adminFlag:0}});
+		} else {
+			await collection.updateOne({"id":userID},{$set:{adminFlag:1}});
 		}
 	} catch(err){
 		console.log(err);
@@ -177,5 +197,5 @@ async function getUsers(){
 }
 
 module.exports = {
-    initDB, getOptions, writeToDB, changeAccessUser, getFromDB, updateOptions, getUsers
+    initDB, getOptions, writeToDB, changeAccessUser, getFromDB, updateOptions, getUsers, changeAdminAccessUser
 };

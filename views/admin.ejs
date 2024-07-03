@@ -42,8 +42,10 @@
 					<td><%=el.name%></td>
 					<td><%=el.autoNo%></td>
 					<td><%=el.id%></td>
-					<td><%if (el.state === 6){%><button title="Восстановить доступ" class="restore" id=<%=el.id%>>✓</button><%} 
-						else { %><button title="Закрыть доступ" class="delete" id=<%=el.id%>>×</button><%}%>
+					<td><%if (el.state === 6){%><button title="Восстановить доступ" class="restore" id=<%=el.id%></button><%} 
+						else { %><button title="Закрыть доступ" class="delete" id=<%=el.id%>></button><%}%>
+						<%if (el.adminFlag === 1){%><button title="Убрать из администраторов" class="demote" id=<%=el.id%></button><%} 
+						else { %><button title="Сделать администратором" class="promote" id=<%=el.id%>></button><%}%>
 					</td>
 				</tr>
 				
@@ -81,16 +83,49 @@
 							console.log(response);
 							throw new Error('Network response was not ok');
 						}
-		let result = await response.json();
+					let result = await response.json();
 
-		if (result) {
-			setTimeout(() => {
-				window.location.reload();
-			}, 150)
-        }
-				}
+					if (result) {
+						setTimeout(() => {
+							window.location.reload();
+						}, 150)
+					}
+				};
+
+				async function changeAdmin(ID){
+					let response = await fetch('/updateUserAdmin', {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({ id: ID })
+					});
+					if (!response.ok) {
+							console.log(response);
+							throw new Error('Network response was not ok');
+						}
+					let result = await response.json();
+
+					if (result) {
+						setTimeout(() => {
+							window.location.reload();
+						}, 150)
+					}
+				};
+
+
+				const addOnClickHandler = (buttons, handlerFunction) => {
+					for (let i = 0; i < buttons.length; i++) {
+						let button = buttons[i];
+						if (button.id) {
+							button.onclick = () => {
+								handlerFunction(button.id);
+							};
+						}
+					}
+				};
 				let restoreButtons = document.getElementsByClassName('restore');
 				let deleteButtons = document.getElementsByClassName('delete');
+				let demoteButtons = document.getElementsByClassName('demote');
+				let promoteButtons = document.getElementsByClassName('promote');
 				for (element in deleteButtons) {
 					if(deleteButtons[element].id){
 						let id = deleteButtons[element].id;
@@ -99,14 +134,13 @@
 						}
 					}
 				};
-				for (element in restoreButtons) {
-					if(restoreButtons[element].id){
-						let id = restoreButtons[element].id;
-						document.getElementById(restoreButtons[element].id).onclick = () => {
-							changeAccess(id);
-						}
-					}
-				};
+
+				addOnClickHandler(deleteButtons, changeAccess);
+				addOnClickHandler(restoreButtons, changeAccess);
+				addOnClickHandler(demoteButtons, changeAdmin);
+				addOnClickHandler(promoteButtons, changeAdmin);
+
+
 				try{
 					document.getElementById('addButton').onclick = () => {
 					let newOption = {"savedValues":{}};

@@ -76,9 +76,10 @@ app.post('/updateOptions', (req, res) => {
 	});
 
 app.post('/updateUser', (req, res) => {
+	console.log("access")
 	try{
 		const value = req.body;
-		mongoFunctions.changeAccessUser(value.id).then(res2 =>{
+		mongoFunctions.changeAccessUser(value.id).then(() =>{
 			res.json(value);
 		});
 		
@@ -86,6 +87,19 @@ app.post('/updateUser', (req, res) => {
 		console.log(err);
 	}
 	});
+
+	app.post('/updateUserAdmin', (req, res) => {
+		console.log("admin")
+		try{
+			const value = req.body;
+			mongoFunctions.changeAdminAccessUser(value.id).then(() =>{
+				res.json(value);
+			});
+			
+		}catch(err){
+			console.log(err);
+		}
+		});
 
 
 app.post('/submit', (req,res) =>{

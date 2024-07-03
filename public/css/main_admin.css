@@ -7,37 +7,60 @@
     to { color: white;}
    }
    .restore{
+	background-image: url(../icons/checkmark.svg);
 	width: 40px;
 	height: 40px;
-	color:rgb(26, 192, 26);
-	font-size: 1.3em;
-	border-radius: 20px;
-	font-style: bold;
-	background-color: #615b4d;
+	background-size: cover;
+	border: none;
    }
    .restore:hover{
-	color:rgb(0, 255, 0);
-	font-size: 1.5em;
-	border-radius: 38px;
-	background-color: #35322b;
+	background-image: url(../icons/checkmark.svg);
+	background-color: #b8ebb3;
 	transition-duration: 400ms;
+	background-size: cover;
+	border: none;
    }
    .delete{
+	background-image: url(../icons/cross.svg);
 	width: 40px;
 	height: 40px;
-	color: rgb(255, 23, 23);
-	background-color: #615b4d;
-	font-size: 1.5em;
-	border-radius: 20px;
-	font-style: bold;
+	background-size: cover;
+	border: none;
    }
    .delete:hover{
-	color: rgb(255, 0, 0);
-	font-size: 1.5em;
-	border-radius: 38px;
-	background-color: #35322b;
+	background-image: url(../icons/cross.svg);
+	background-color: #ebb3b3;
 	transition-duration: 400ms;
+	background-size: cover;
+	border: none;
    }
+   .promote{
+	background-image: url(../icons/users.svg);
+	width: 40px;
+	height: 40px;
+	background-size: cover;
+	border: none;
+   }
+   .promote:hover{
+	background-image: url(../icons/users.svg);
+	background-color: #ebb3b3;
+	transition-duration: 400ms;
+	background-size: cover;
+   }
+   .demote{
+	background-image: url(../icons/user.svg);
+	width: 40px;
+	height: 40px;
+	background-size: cover;
+	border: none;
+   }
+   .demote:hover{
+	background-image: url(../icons/user.svg);
+	background-color: #ebb3b3;
+	transition-duration: 400ms;
+	background-size: cover;
+   }
+
    #users {
 	font-family: Arial, Helvetica, sans-serif;
 	border-collapse: collapse;
