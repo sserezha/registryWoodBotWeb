@@ -22,6 +22,7 @@ router.get('/?fail', (req, res) => {
 });
 
 router.get('/admin/', adminMiddleware, (req,res) =>{
+    console.log("checkauth="+mongoFunctions.checkAuth(req.cookies.auth))
 	res.render('admin',{action: req.params.action});
 });
 
