@@ -2,6 +2,7 @@ const XLSX = require("xlsx");
 const dotenv = require('dotenv').config();
 const MongoClient = require('mongodb').MongoClient;
 const url = process.env.URL;
+const cookieParser = require('cookie-parser');
 const mongoClient = new MongoClient(url, {
 	maxPoolSize: 100,
 	minPoolSize: 10,
@@ -201,15 +202,27 @@ async function getUsers(){
 }
 }
 
+async function checkAuth(phone){
+    await mongoClient.connect();
+    const db = mongoClient.db("main");
+    const users = db.collection("users");
+    const user = await users.find({"phone":phone}).toArray();
+    console.log(user);
+    if (user.length>0){
+        return true;
+    } else {
+        return false;
+    }
+}
+
 async function checkCode(code){
     try{
         await mongoClient.connect();
         const db = mongoClient.db("main");
         const users = db.collection("users");
         const user = await users.find({"code":parseInt(code)}).toArray();
-        console.log(user, code);
-        if (user){
-            return user;
+        if (user.length>0){
+            return user[0].phone;
         } else {
             return "not found";
         }
@@ -219,5 +232,5 @@ async function checkCode(code){
 };
 
 module.exports = {
-    initDB, getOptions, writeToDB, changeAccessUser, getFromDB, updateOptions, getUsers, changeAdminAccessUser, checkCode
+    initDB, getOptions, writeToDB, changeAccessUser, getFromDB, updateOptions, getUsers, changeAdminAccessUser, checkCode, checkAuth
 };

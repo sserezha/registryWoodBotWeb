@@ -3,9 +3,10 @@ const router = express.Router();
 const autoNumbers=[197,737,327,281,947,221,814];
 const mongoFunctions = require("../mongoFunctions");
 
-const adminMiddleware = (req, res, next) => {
-	if (req.cookies.username != "test"){next();}
+const adminMiddleware = async (req, res, next) => {
+	if (await mongoFunctions.checkAuth(req.cookies.auth)){next();}
 	else {
+        console.log(await mongoFunctions.checkAuth(req.cookies.auth));
 		res.render('auth');
 	}
 };
@@ -59,8 +60,8 @@ try{
 
     router.post('/checkCode', async (req,res) => {
 	const reqResult = await mongoFunctions.checkCode(req.body.code);
+    console.log(reqResult)
 	res.json(reqResult);
-	console.log(reqResult);
 })
 
 router.post('/updateUserAdmin', (req, res) => {
