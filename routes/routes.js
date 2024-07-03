@@ -5,9 +5,8 @@ const mongoFunctions = require("../mongoFunctions");
 
 const adminMiddleware = async (req, res, next) => {
     const phone = req.cookies.auth;
+    let check = "not authorized"
     if (req.cookies.auth){
-       const check = "not authorized";
-    }else {
         const check = await mongoFunctions.checkAuth(req.cookies.auth);
     }
     console.log("check = "+check+" || req.cookies.auth = "+req.cookies.auth);
