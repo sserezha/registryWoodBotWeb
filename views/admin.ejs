@@ -39,7 +39,7 @@
 				</tr>
 			<%userList.forEach((el) =>{%>
 				<tr>
-					<td><%=el.name%> <%if (el.state === 6){%>(Заблокирован)<%}></td>
+					<td><%=el.name%> <%if (el.state === 6){%>(Заблокирован)<%}%></td>
 					<td><%=el.autoNo%></td>
 					<td><%=el.id%></td>
 					<td><%if (el.state === 6){%><button title="Восстановить доступ" class="restore" id=<%=el.id%></button><%} 
