@@ -42,7 +42,7 @@
 					<td><%=el.name%> <%if (el.state === 6){%>(<i>Заблокирован в боте</i>)<%}%></td>
 					<td><%=el.autoNo%></td>
 					<td><%=el.id%></td>
-					<td><div class='tableAccessButton'><%if (el.state === 6){%><button title="Восстановить доступ" class="restore" id=<%=el.id%></button><%} 
+					<td style="display: flex;"><div class='tableAccessButton'><%if (el.state === 6){%><button title="Восстановить доступ" class="restore" id=<%=el.id%></button><%} 
 						else { %><button title="Закрыть доступ" class="delete" id=<%=el.id%>></button><%}%></div>
 						<div class='tableAdminButton'><%if (el.adminFlag === 1){%><button title="Убрать из администраторов" class="demote" id=<%=el.id%></button><%} 
 						else { %><button title="Сделать администратором" class="promote" id=<%=el.id%>></button><%}%></div>
