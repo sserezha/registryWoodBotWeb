@@ -189,6 +189,7 @@ p{
 		flex-direction: column;
 		align-items: center;
 		padding: 5px;
+		font-size: smaller;
 	}
 .tableAdminButton{
 	margin: 5px;
