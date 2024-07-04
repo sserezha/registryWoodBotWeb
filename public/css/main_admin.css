@@ -15,6 +15,8 @@
     background-position: center;
     background-repeat: no-repeat;
 	background-color: rgba(0,0,0,0);
+	border-radius: 10px;
+	border: outset;
    }
    .restore{
 	background-image: url(../icons/checkmark.svg);
@@ -23,13 +25,15 @@
 	background-size: cover;
 	border: none;
 	background-color: rgba(0,0,0,0);
+	border-radius: 10px;
+	border: outset;
    }
    .restore:hover{
 	background-image: url(../icons/checkmark.svg);
 	background-color: #b8ebb3;
 	transition-duration: 400ms;
 	background-size: cover;
-	border: none;
+	border: 1px;
    }
    .delete{
 	background-image: url(../icons/cross.svg);
@@ -38,6 +42,8 @@
 	background-size: cover;
 	border: none;
 	background-color: rgba(0,0,0,0);
+	border-radius: 10px;
+	border: outset;
    }
    .delete:hover{
 	background-image: url(../icons/cross.svg);
@@ -53,6 +59,8 @@
 	background-size: cover;
 	border: none;
 	background-color: rgba(0,0,0,0);
+	border-radius: 10px;
+	border: outset;
    }
    .promote:hover{
 	background-image: url(../icons/users.svg);
@@ -67,6 +75,8 @@
 	background-size: cover;
 	border: none;
 	background-color: rgba(0,0,0,0);
+	border-radius: 10px;
+	border: outset;
    }
    .demote:hover{
 	background-image: url(../icons/user.svg);
