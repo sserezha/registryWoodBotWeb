@@ -90,6 +90,7 @@
   #users td, #users th {
 	border: 1px solid #ddd;
 	padding: 8px;
+	display: flex;
   }
 
   #users tr:nth-child(even){background-color: #f2f2f2;}
