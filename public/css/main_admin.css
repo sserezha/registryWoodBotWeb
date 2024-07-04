@@ -37,6 +37,7 @@
 	height: 40px;
 	background-size: cover;
 	border: none;
+	background-color: rgba(0,0,0,0);
    }
    .delete:hover{
 	background-image: url(../icons/cross.svg);
