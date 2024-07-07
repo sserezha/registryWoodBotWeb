@@ -50,6 +50,22 @@
 	transition-duration: 400ms;
 	background-size: cover;
    }
+   .regDelete{
+	background-image: url(../icons/cross.svg);
+	width: 40px;
+	height: 40px;
+	background-size: cover;
+	border: none;
+	background-color: rgba(0,0,0,0);
+	border-radius: 10px;
+	border: outset;
+   }
+   .regDelete:hover{
+	background-image: url(../icons/cross.svg);
+	background-color: #ebb3b3;
+	transition-duration: 400ms;
+	background-size: cover;
+   }
    .promote{
 	background-image: url(../icons/users.svg);
 	width: 40px;

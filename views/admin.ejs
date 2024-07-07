@@ -9,7 +9,8 @@
 			<a href="/admin/destinations"><button>Изменить пункты назначения</button></a>
 			<a href="/admin/loadouts"><button>Изменить пункты вывоза</button></a>
 			<a href="/admin/loadins"><button>Изменить варианты пород дерева</button></a>
-			<a href="/admin/sortiments"><button>Изменить варианты сортиментов</button></a>	
+			<a href="/admin/sortiments"><button>Изменить варианты сортиментов</button></a>
+			<a href="/admin/registry"><button>Реестр рейсов</button></a>	
 			<div class="area"><% if (action === 'download'){%>
 			<form method="post" action="/download">
 			<p>Выберите месяц<p>
@@ -65,7 +66,45 @@
 			
 		</table>
 			<%}%>
+			<%if (action === "registry" ){%>
 
+				<table id = "users">
+					<tr>
+						<th>Тип рейса</th>
+						<th>Дата рейса</th>
+						<th>Номер авто (Пользователь)</th>
+						<th>Порода</th>
+						<th>Сортимент</th>
+						<th>Откуда</th>
+						<th>Куда</th>
+						<th>Количество поездок</th>
+						<th>Действия</th>
+					</tr>
+				<%registry.forEach((el) =>{%>
+					<tr>
+						<td><%=el.rideType%></td>
+						<td><%=el.enteredData.date%></td>
+						<td><%=el.enteredData.autoNo%></td>
+						<td><%=el.enteredData.woodSpecies%></td>
+						<td><%=el.enteredData.sortiment%></td>
+						<td><%=el.enteredData.rideFrom%></td>
+						<td><%=el.enteredData.rideTo%></td>
+						<td><%=el.enteredData.ridesCount%></td>
+						<td style="display: flex;">
+							<div class='tableAccessButton'>
+									<button title="Удалить" class="regDelete" id="<%= el._id %>"></button>Удалить
+							</div>
+							<div class='tableAdminButton'>
+									<button title="Изменить" class="restore" id="<%= el._id %>"></button>Редактировать
+							</div>
+						</td>
+					</tr>
+					
+				<%})%>
+				
+			</table>
+				<%}%>
+	
 			</div>
 			<script>
 				async function sendUpdate(newOption){
@@ -103,7 +142,22 @@
 						}, 150)
 					}
 				};
-
+				async function deleteRegistryObject(_id){
+					let response = await fetch("/deleteRegistryObject", {
+						method: "POST",
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({ _id: _id })
+					});
+				if (!response.ok){
+					console.log(response);
+					throw new Error('Response !ok');
+				} let result = await response.json();
+				if (result) {
+						setTimeout(() => {
+							window.location.reload();
+						}, 150)
+					}
+				};
 				async function changeAdmin(ID){
 					let response = await fetch('/updateUserAdmin', {
 						method: 'POST',
@@ -138,15 +192,9 @@
 				let deleteButtons = document.getElementsByClassName('delete');
 				let demoteButtons = document.getElementsByClassName('demote');
 				let promoteButtons = document.getElementsByClassName('promote');
-				for (element in deleteButtons) {
-					if(deleteButtons[element].id){
-						let id = deleteButtons[element].id;
-						document.getElementById(deleteButtons[element].id).onclick = () => {
-							changeAccess(id);
-						}
-					}
-				};
+				let regDeleteButtons = document.getElementsByClassName('regDelete');
 
+				addOnClickHandler(regDeleteButtons, deleteRegistryObject)
 				addOnClickHandler(deleteButtons, changeAccess);
 				addOnClickHandler(restoreButtons, changeAccess);
 				addOnClickHandler(demoteButtons, changeAdmin);

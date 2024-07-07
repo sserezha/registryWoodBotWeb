@@ -1,8 +1,8 @@
 const XLSX = require("xlsx");
 const dotenv = require('dotenv').config();
 const MongoClient = require('mongodb').MongoClient;
+const ObjectId = require('mongodb').ObjectId;
 const url = process.env.URL;
-const cookieParser = require('cookie-parser');
 const mongoClient = new MongoClient(url, {
 	maxPoolSize: 100,
 	minPoolSize: 10,
@@ -242,6 +242,25 @@ async function checkCode(code){
     }
 };
 
+async function getRawRegistry(){
+    await mongoClient.connect();
+    const db = mongoClient.db("main");
+    const collection = db.collection("registry");
+    const res = await collection.find({}).toArray();
+    return res;
+}
+
+async function deleteRegistryObject(_id){
+    await mongoClient.connect();
+    const db = mongoClient.db("main");
+    const collection = db.collection("registry");
+    const idToDelete = new ObjectId(_id);
+    const result = await collection.deleteOne({_id:idToDelete});
+    const found = await collection.find({}).toArray();
+    console.log(found[0]._id);
+    return result;
+}
+
 module.exports = {
-    migrateRegistry,  initDB, getOptions, writeToDB, changeAccessUser, getFromDB, updateOptions, getUsers, changeAdminAccessUser, checkCode, checkAuth
+    deleteRegistryObject, migrateRegistry,  initDB, getOptions, writeToDB, changeAccessUser, getFromDB, updateOptions, getUsers, changeAdminAccessUser, checkCode, checkAuth, getRawRegistry
 };

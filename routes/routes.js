@@ -29,10 +29,12 @@ router.get('/admin/', adminMiddleware, (req,res) =>{
 
 router.get('/admin/:action', adminMiddleware, (req,res) =>{
 	mongoFunctions.getUsers().then(users=>{
-		mongoFunctions.getOptions(req.params.action).then (result=>{
-			res.render('admin',{action: req.params.action, query: req.query, options: result[0], userList: users});
+		mongoFunctions.getRawRegistry().then(registry=>{
+			mongoFunctions.getOptions(req.params.action).then (result=>{
+				res.render('admin',{action: req.params.action, query: req.query, options: result[0], userList: users, registry: registry});
+			});
 		});
-	})
+	});
 	});
 
     router.get('/success', (req,res) =>{
@@ -90,6 +92,13 @@ router.post('/submit', (req,res) =>{
 			return res.redirect('/success');
 	}
 });
+
+router.post("/deleteRegistryObject", (req,res)=>{
+	mongoFunctions.deleteRegistryObject(req.body._id).then(result=>{
+		res.send(result);
+	});
+
+})
 
 router.post('/download', (req,res) =>{
 	mongoFunctions.getFromDB(req.body.mounth).then(result=>{
