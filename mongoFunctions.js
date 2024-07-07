@@ -9,6 +9,13 @@ const mongoClient = new MongoClient(url, {
 	maxIdleTimeMS: 30000,
 	waitQueueTimeoutMS: 5000
 });
+async function migrateRegistry(){
+    await mongoClient.connect();
+    const db = mongoClient.db("main");
+    const collection = db.collection("registry");
+    const res = await collection.updateMany({},{$set:{rideType:"Полный рейс"}})
+    return res;
+}
 
 async function initDB(){
     try{
@@ -145,8 +152,9 @@ async function getFromDB(date){
 		let foundResult = checkDate(findAll, mounth, year);
         foundResult.forEach((item, index) => {
             let row = index + 2;
-            let keys = ['A', 'B', 'C', 'D', 'E', 'F', 'G'].map(letter => letter + row);
+            let keys = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'].map(letter => letter + row);
             let values = [
+                { type: 's', value: item.rideType},
                 { type: 'd', value: Date.parse(item.enteredData.date + 'T00:00:00.000Z'), format: 'dd/mm/yyyy' },
                 { type: 's', value: item.enteredData.autoNo },
                 { type: 's', value: item.enteredData.woodSpecies },
@@ -235,5 +243,5 @@ async function checkCode(code){
 };
 
 module.exports = {
-    initDB, getOptions, writeToDB, changeAccessUser, getFromDB, updateOptions, getUsers, changeAdminAccessUser, checkCode, checkAuth
+    migrateRegistry,  initDB, getOptions, writeToDB, changeAccessUser, getFromDB, updateOptions, getUsers, changeAdminAccessUser, checkCode, checkAuth
 };
