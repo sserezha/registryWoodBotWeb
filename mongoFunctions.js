@@ -17,44 +17,48 @@ async function migrateRegistry(){
     return res;
 }
 
-async function initDB(){
-    try{
-        await mongoClient.connect();
-        const db = mongoClient.db("main");
-        let options = db.collection("options");
-        let replies = db.collection("replies");
-        const checkOpt = await options.find({}).toArray();
-        const checkRep = await replies.find({}).toArray();
-        let resultOpt = false;
-        let resultRep = false;
-        if (checkOpt.length>0){
-            resultOpt = true;
-        } else {
-            options.replaceOne({optionName:"loadins"},{optionName:"loadins",displayName:"Породы",savedValues:{}});
-            options.replaceOne({optionName:"loadouts"},{optionName:"loadouts",displayName:"Пункты вывоза",savedValues:{}});
-            options.replaceOne({optionName:"destinations"},{optionName:"destinations",displayName:"Пункты выгрузки",savedValues:{}});
-            options.replaceOne({optionName:"sortiments"},{optionName:"sortiments",displayName:"Сортименты",savedValues:{}});
-            options.replaceOne({optionName:"download"},{optionName:"download",displayName:"Скачать Excell",savedValues:{}});
-            options.replaceOne({optionName:"registry"},{optionName:"registry",displayName:"Реестр рейсов",savedValues:{}});
-            options.replaceOne({optionName:"users"},{optionName:"users",displayName:"Пользователи",savedValues:{}});
-            resultOpt = "fixed";
-        }
-        if (checkRep.length>0){
-            resultRep = true;
-        } else {
-            replies.replaceOne({state:"dateRegistered"},{nextButtons:"loadins",state:"dateRegistered",stateToChange:"loadinsRegistered",textForNextMessage:"Укажите породу дерева"});
-            replies.replaceOne({state:"loadinsRegistered"},{nextButtons:"sortiments",state:"loadinsRegistered",stateToChange:"sortimentSet",textForNextMessage:"Укажите сортимент"});
-            replies.replaceOne({state:"sortimentSet"},{nextButtons:"loadouts",state:"sortimentSet",stateToChange:"loadoutsSet",textForNextMessage:"Откуда везём"});
-            replies.replaceOne({state:"loadoutsSet"},{nextButtons:"destinations",state:"loadoutsSet",stateToChange:"rideType",textForNextMessage:"Куда везём"});
-            replies.replaceOne({state:"endStage"},{nextButtons:null,state:"endStage",stateToChange:null,textForNextMessage:"Укажите количество рейсов"});
-            resultRep = "fixed";
-        }
-        return {resultOpt, resultRep};
-    } catch(err) {
-        console.log(err);
+async function initDB() {
+    try {
+      await mongoClient.connect();
+      const db = mongoClient.db("main");
+      const optionsCollectionExists = await db.listCollections({ name: 'options' }).hasNext();
+      if (!optionsCollectionExists) {
+        await db.createCollection("options");
+        const options = db.collection("options");
+        await options.insertMany([
+          { optionName: "loadins", displayName: "Породы", savedValues: {} },
+          { optionName: "loadouts", displayName: "Пункты вывоза", savedValues: {} },
+          { optionName: "destinations", displayName: "Пункты выгрузки", savedValues: {} },
+          { optionName: "sortiments", displayName: "Сортименты", savedValues: {} },
+          { optionName: "download", displayName: "Скачать Excell", savedValues: {} },
+          { optionName: "registry", displayName: "Реестр рейсов", savedValues: {} },
+          { optionName: "users", displayName: "Пользователи", savedValues: {} }
+        ]);
+        console.log("Options collection created and initialized");
+      }
+      const repliesCollectionExists = await db.listCollections({ name: 'replies' }).hasNext();
+      if (!repliesCollectionExists) {
+        await db.createCollection("replies");
+        const replies = db.collection("replies");
+        await replies.insertMany([
+          { nextButtons: "loadins", state: "dateRegistered", stateToChange: "loadinsRegistered", textForNextMessage: "Укажите породу дерева" },
+          { nextButtons: "sortiments", state: "loadinsRegistered", stateToChange: "sortimentSet", textForNextMessage: "Укажите сортимент" },
+          { nextButtons: "loadouts", state: "sortimentSet", stateToChange: "loadoutsSet", textForNextMessage: "Откуда везём" },
+          { nextButtons: "destinations", state: "loadoutsSet", stateToChange: "rideType", textForNextMessage: "Куда везём" },
+          { nextButtons: null, state: "endStage", stateToChange: null, textForNextMessage: "Укажите количество рейсов" }
+        ]);
+        console.log("Replies collection created and initialized");
+      }
+      const resultOpt = optionsCollectionExists ? true : "fixed";
+      const resultRep = repliesCollectionExists ? true : "fixed";
+      
+      return { resultOpt, resultRep };
+    } catch (err) {
+      console.error('An error occurred:', err);
+    } finally {
+      await mongoClient.close();
     }
-    
-}
+  }
 
 async function getOptions(option){
     try{
