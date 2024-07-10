@@ -20,11 +20,15 @@ async function migrateRegistry(){
 async function initDB() {
     try {
       await mongoClient.connect();
+      console.log("Connected successfully to server");
+  
       const db = mongoClient.db("main");
-      const optionsCollectionExists = await db.listCollections({ name: 'options' }).hasNext();
-      if (!optionsCollectionExists) {
+  
+      // Проверка и создание коллекции "options"
+      const options = db.collection("options");
+      const optionsDoc = await options.findOne({});
+      if (!optionsDoc) {
         await db.createCollection("options");
-        const options = db.collection("options");
         await options.insertMany([
           { optionName: "loadins", displayName: "Породы", savedValues: {} },
           { optionName: "loadouts", displayName: "Пункты вывоза", savedValues: {} },
@@ -35,11 +39,15 @@ async function initDB() {
           { optionName: "users", displayName: "Пользователи", savedValues: {} }
         ]);
         console.log("Options collection created and initialized");
+      } else {
+        console.log("Options collection already contains documents");
       }
-      const repliesCollectionExists = await db.listCollections({ name: 'replies' }).hasNext();
-      if (!repliesCollectionExists) {
+  
+      // Проверка и создание коллекции "replies"
+      const replies = db.collection("replies");
+      const repliesDoc = await replies.findOne({});
+      if (!repliesDoc) {
         await db.createCollection("replies");
-        const replies = db.collection("replies");
         await replies.insertMany([
           { nextButtons: "loadins", state: "dateRegistered", stateToChange: "loadinsRegistered", textForNextMessage: "Укажите породу дерева" },
           { nextButtons: "sortiments", state: "loadinsRegistered", stateToChange: "sortimentSet", textForNextMessage: "Укажите сортимент" },
@@ -48,9 +56,12 @@ async function initDB() {
           { nextButtons: null, state: "endStage", stateToChange: null, textForNextMessage: "Укажите количество рейсов" }
         ]);
         console.log("Replies collection created and initialized");
+      } else {
+        console.log("Replies collection already contains documents");
       }
-      const resultOpt = optionsCollectionExists ? true : "fixed";
-      const resultRep = repliesCollectionExists ? true : "fixed";
+  
+      const resultOpt = optionsDoc ? true : "fixed";
+      const resultRep = repliesDoc ? true : "fixed";
       
       return { resultOpt, resultRep };
     } catch (err) {
