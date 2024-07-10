@@ -30,25 +30,23 @@ async function initDB(){
         if (checkOpt.length>0){
             resultOpt = true;
         } else {
-            await db.createCollection("options");
-            options.insertOne({optionName:"loadins",displayName:"Породы",savedValues:{}});
-            options.insertOne({optionName:"loadouts",displayName:"Пункты вывоза",savedValues:{}});
-            options.insertOne({optionName:"destinations",displayName:"Пункты выгрузки",savedValues:{}});
-            options.insertOne({optionName:"sortiments",displayName:"Сортименты",savedValues:{}});
-            options.insertOne({optionName:"download",displayName:"Скачать Excell",savedValues:{}});
-            options.insertOne({optionName:"registry",displayName:"Реестр рейсов",savedValues:{}});
-            options.insertOne({optionName:"users",displayName:"Пользователи",savedValues:{}});
+            options.replaceOne({optionName:"loadins"},{optionName:"loadins",displayName:"Породы",savedValues:{}});
+            options.replaceOne({optionName:"loadouts"},{optionName:"loadouts",displayName:"Пункты вывоза",savedValues:{}});
+            options.replaceOne({optionName:"destinations"},{optionName:"destinations",displayName:"Пункты выгрузки",savedValues:{}});
+            options.replaceOne({optionName:"sortiments"},{optionName:"sortiments",displayName:"Сортименты",savedValues:{}});
+            options.replaceOne({optionName:"download"},{optionName:"download",displayName:"Скачать Excell",savedValues:{}});
+            options.replaceOne({optionName:"registry"},{optionName:"registry",displayName:"Реестр рейсов",savedValues:{}});
+            options.replaceOne({optionName:"users"},{optionName:"users",displayName:"Пользователи",savedValues:{}});
             resultOpt = "fixed";
         }
         if (checkRep.length>0){
             resultRep = true;
         } else {
-            await db.createCollection("replies");
-            replies.insertOne({nextButtons:"loadins",state:"dateRegistered",stateToChange:"loadinsRegistered",textForNextMessage:"Укажите породу дерева"});
-            replies.insertOne({nextButtons:"sortiments",state:"loadinsRegistered",stateToChange:"sortimentSet",textForNextMessage:"Укажите сортимент"});
-            replies.insertOne({nextButtons:"loadouts",state:"sortimentSet",stateToChange:"loadoutsSet",textForNextMessage:"Откуда везём"});
-            replies.insertOne({nextButtons:"destinations",state:"loadoutsSet",stateToChange:"rideType",textForNextMessage:"Куда везём"});
-            replies.insertOne({nextButtons:null,state:"endStage",stateToChange:null,textForNextMessage:"Укажите количество рейсов"});
+            replies.replaceOne({state:"dateRegistered"},{nextButtons:"loadins",state:"dateRegistered",stateToChange:"loadinsRegistered",textForNextMessage:"Укажите породу дерева"});
+            replies.replaceOne({state:"loadinsRegistered"},{nextButtons:"sortiments",state:"loadinsRegistered",stateToChange:"sortimentSet",textForNextMessage:"Укажите сортимент"});
+            replies.replaceOne({state:"sortimentSet"},{nextButtons:"loadouts",state:"sortimentSet",stateToChange:"loadoutsSet",textForNextMessage:"Откуда везём"});
+            replies.replaceOne({state:"loadoutsSet"},{nextButtons:"destinations",state:"loadoutsSet",stateToChange:"rideType",textForNextMessage:"Куда везём"});
+            replies.replaceOne({state:"endStage"},{nextButtons:null,state:"endStage",stateToChange:null,textForNextMessage:"Укажите количество рейсов"});
             resultRep = "fixed";
         }
         return {resultOpt, resultRep};
