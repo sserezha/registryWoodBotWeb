@@ -23,11 +23,11 @@ app.use((req, res, next) => {
 })
 
 app.listen(PORT, () => {
-	mongoFunctions.migrateRegistry().then(res =>{
-		console.log(res);
-	})
-	// mongoFunctions.initDB().then(res =>{
+	// mongoFunctions.migrateRegistry().then(res =>{
 	// 	console.log(res);
-	// });
+	// })
+	mongoFunctions.initDB().then(res =>{
+		console.log(res);
+	});
 	console.log('Server is running');
 });
