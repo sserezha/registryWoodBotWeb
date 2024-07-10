@@ -14,6 +14,8 @@ const adminMiddleware = async (req, res, next) => {
 };
 
 router.get('/', (req, res) => {
+	res.redirect('admin');
+	return true;
 	let failed = req.query.fail
 	res.render('index', {autoNumbers, failed})		
 });
