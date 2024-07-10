@@ -21,8 +21,8 @@ async function initDB(){
     try{
         await mongoClient.connect();
         const db = mongoClient.db("main");
-        const options = db.collection("options");
-        const replies = db.collection("replies");
+        let options = db.collection("options");
+        let replies = db.collection("replies");
         const checkOpt = await options.find({}).toArray();
         const checkRep = await replies.find({}).toArray();
         let resultOpt = false;
@@ -30,6 +30,7 @@ async function initDB(){
         if (checkOpt.length>0){
             resultOpt = true;
         } else {
+            await db.createCollection("options");
             options.insertOne({optionName:"loadins",displayName:"Породы",savedValues:{}});
             options.insertOne({optionName:"loadouts",displayName:"Пункты вывоза",savedValues:{}});
             options.insertOne({optionName:"destinations",displayName:"Пункты выгрузки",savedValues:{}});
@@ -42,6 +43,7 @@ async function initDB(){
         if (checkRep.length>0){
             resultRep = true;
         } else {
+            await db.createCollection("replies");
             replies.insertOne({nextButtons:"loadins",state:"dateRegistered",stateToChange:"loadinsRegistered",textForNextMessage:"Укажите породу дерева"});
             replies.insertOne({nextButtons:"sortiments",state:"loadinsRegistered",stateToChange:"sortimentSet",textForNextMessage:"Укажите сортимент"});
             replies.insertOne({nextButtons:"loadouts",state:"sortimentSet",stateToChange:"loadoutsSet",textForNextMessage:"Откуда везём"});
