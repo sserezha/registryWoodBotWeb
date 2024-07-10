@@ -34,7 +34,8 @@ async function initDB(){
             options.insertOne({optionName:"loadouts",displayName:"Пункты вывоза",savedValues:{}});
             options.insertOne({optionName:"destinations",displayName:"Пункты выгрузки",savedValues:{}});
             options.insertOne({optionName:"sortiments",displayName:"Сортименты",savedValues:{}});
-            // options.insertOne({optionName:"rideType",displayName:"Типы поездки",savedValues:{"0":'Выгрузка',"1":"Погрузка"}});
+            options.insertOne({optionName:"download",displayName:"Скачать Excell",savedValues:{}});
+            options.insertOne({optionName:"registry",displayName:"Реестр рейсов",savedValues:{}});
             resultOpt = "fixed";
         }
         if (checkRep.length>0){
