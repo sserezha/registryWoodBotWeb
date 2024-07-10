@@ -45,7 +45,6 @@ async function initDB(){
             replies.insertOne({nextButtons:"sortiments",state:"loadinsRegistered",stateToChange:"sortimentSet",textForNextMessage:"Укажите сортимент"});
             replies.insertOne({nextButtons:"loadouts",state:"sortimentSet",stateToChange:"loadoutsSet",textForNextMessage:"Откуда везём"});
             replies.insertOne({nextButtons:"destinations",state:"loadoutsSet",stateToChange:"rideType",textForNextMessage:"Куда везём"});
-            replies.insertOne({nextButtons:"rideType",state:"rideType",stateToChange:"endStage",textForNextMessage:"Выберите тип поездки"});
             replies.insertOne({nextButtons:null,state:"endStage",stateToChange:null,textForNextMessage:"Укажите количество рейсов"});
             resultRep = "fixed";
         }
