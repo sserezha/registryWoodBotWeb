@@ -36,6 +36,7 @@ async function initDB(){
             options.insertOne({optionName:"sortiments",displayName:"Сортименты",savedValues:{}});
             options.insertOne({optionName:"download",displayName:"Скачать Excell",savedValues:{}});
             options.insertOne({optionName:"registry",displayName:"Реестр рейсов",savedValues:{}});
+            options.insertOne({optionName:"users",displayName:"Пользователи",savedValues:{}});
             resultOpt = "fixed";
         }
         if (checkRep.length>0){

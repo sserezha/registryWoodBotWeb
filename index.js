@@ -5,7 +5,10 @@ const app = express();
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv').config();
 const cookieParser = require('cookie-parser');
-const mongoFunctions = require("./mongoFunctions")
+const mongoFunctions = require("./mongoFunctions");
+const favicon = require('serve-favicon');
+
+app.use(favicon('public/icons/favicon.png'));
 app.use(bodyParser.json());
 app.set('view engine','ejs');
 app.use(express.static('public'));
